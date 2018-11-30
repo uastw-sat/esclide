@@ -9,7 +9,7 @@ package at.embsys.sat;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
@@ -20,8 +20,7 @@ public class PlatformDetector implements Runnable {
     private Process procUSBDevices;
     private ObservableList<String> optionsInfineon = FXCollections.observableArrayList();
     private ObservableList<String> optionsTI = FXCollections.observableArrayList();
-    private final ComboBox comboBoxHWList;
-    private final ComboBox comboBoxManufacturer;
+    private final ListView listView;
     private boolean end = false;
     private final String OS = System.getProperty("os.name").toLowerCase();
     private String processInput;
@@ -31,11 +30,8 @@ public class PlatformDetector implements Runnable {
         this.end = end;
     }
 
-    public PlatformDetector(ComboBox comboBoxHardware, ComboBox comboboxManufacturer) {
-
-        comboBoxHWList = comboBoxHardware;
-        comboBoxManufacturer = comboboxManufacturer;
-
+    public PlatformDetector(ListView listView) {
+        this.listView = listView;
     }
 
     @Override
@@ -63,6 +59,7 @@ public class PlatformDetector implements Runnable {
                 }
             } else if (OS.contains("windows")) {
                 try {
+                    //wmic path CIM_LogicalDevice where "Description like '%USB%'" get /value
                     procUSBDevices = Runtime.getRuntime().exec("wmic path CIM_LogicalDevice where \"Description like 'J-Link%'\" get /value");
                 } catch (IOException e) {
                     logger.warn(e.getMessage());
@@ -158,7 +155,7 @@ public class PlatformDetector implements Runnable {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-
+                        /*Not needed anymore since USB HotPlugListener - Michael Mazanek
                         Object selectedItem = comboBoxHWList.getSelectionModel().getSelectedItem();
                         String selectedMan = comboBoxManufacturer.getSelectionModel().getSelectedItem().toString();
                         if (selectedMan.equals("Infineon")) comboBoxHWList.setItems(optionsInfineon);
@@ -170,6 +167,7 @@ public class PlatformDetector implements Runnable {
                             if (optionsTI != null && optionsTI.size() > 0 && selectedMan.equals("TI"))
                                 comboBoxHWList.getSelectionModel().select(optionsTI.get(0));
                         }
+                        */
                     }
                 });
             }

@@ -1,175 +1,211 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.embsys.sat.Controller">
-   <columnConstraints>
-      <ColumnConstraints />
-      <ColumnConstraints />
-      <ColumnConstraints />
-       <ColumnConstraints />
-       <ColumnConstraints />
-      <ColumnConstraints />
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints />
-      <RowConstraints />
-      <RowConstraints />
-      <RowConstraints />
-      <RowConstraints />
-
-   </rowConstraints>
+<VBox minHeight="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.embsys.sat.Controller">
    <children>
-      <HBox alignment="BOTTOM_LEFT" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+      <HBox alignment="BOTTOM_LEFT">
          <children>
+            <VBox prefWidth="156.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <Label minWidth="-Infinity" text="Platform: " visible="false" />
+                        <Label fx:id="developmentPlatform" minWidth="-Infinity" text="?" visible="false" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label minWidth="-Infinity" text="Port: " />
+                        <Label fx:id="serverPortLabel" minWidth="-Infinity" text="2331" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label minWidth="-Infinity" text="Server: " />
+                        <Label fx:id="serverIpLabel" maxWidth="-Infinity" text="localhost" textOverrun="CENTER_ELLIPSIS" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Debug Server" VBox.vgrow="ALWAYS" />
+                  <Circle fx:id="serverStateCircle" fill="GREY" radius="10.0" rotate="56.3" stroke="BLACK" strokeType="INSIDE" />
+               </children>
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets left="5.0" right="5.0" />
+               </opaqueInsets>
+            </VBox>
             <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Browser" VBox.vgrow="ALWAYS" />
                   <Circle fx:id="browserStateCircle" fill="GREY" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
                </children>
                <HBox.margin>
-                  <Insets left="5.0" right="5.0" />
+                  <Insets right="5.0" />
                </HBox.margin>
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
             </VBox>
-            <VBox alignment="CENTER">
+            <VBox fx:id="vBoxOOCD" alignment="CENTER" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+            </VBox>
+            <VBox fx:id="vBoxJLink" alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Server" VBox.vgrow="ALWAYS" />
-                  <Circle fx:id="serverStateCircle" fill="GREY" radius="10.0" rotate="56.3" stroke="BLACK" strokeType="INSIDE" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Debug Server Process" VBox.vgrow="ALWAYS" />
+                  <Circle fx:id="debugServerProcess" fill="GREY" radius="10.0" stroke="BLACK" strokeType="INSIDE">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Circle>
+               </children>
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+            </VBox>
+            <VBox>
+               <children>
+                  <Button fx:id="selectoocd" contentDisplay="RIGHT" minWidth="-Infinity" mnemonicParsing="false" onAction="#selectOOCD" text="Select OpenOCD">
+                     <VBox.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </VBox.margin></Button>
+                  <Button fx:id="selectjlink" contentDisplay="RIGHT" minWidth="-Infinity" mnemonicParsing="false" onAction="#selectJLink" text="Select JLink GDB Server">
+                     <VBox.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </VBox.margin></Button>
                </children>
                <padding>
-                  <Insets left="5.0" right="5.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
-               <opaqueInsets>
-                  <Insets left="5.0" right="5.0" />
-               </opaqueInsets>
             </VBox>
          </children>
       </HBox>
-      <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+      <HBox>
          <children>
-            <HBox>
+            <Label text="OocdPath: ">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Label>
+            <Label fx:id="oocdpath" contentDisplay="CENTER" maxHeight="-Infinity" text="Unknown" textOverrun="CENTER_ELLIPSIS" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox>
+         <children>
+            <Label text="Jlink path: ">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Label>
+            <Label fx:id="jlinkpath" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" text="Unknown" textOverrun="CENTER_ELLIPSIS" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <VBox>
+         <children>
+            <Label text="USB devices: ">
+               <VBox.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </VBox.margin></Label>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <Label minWidth="-Infinity" text="Server: " />
-                  <Label fx:id="serverIpLabel" maxWidth="-Infinity" text="localhost" textOverrun="CENTER_ELLIPSIS" />
+                  <ListView fx:id="platFormListView" minHeight="150.0" />
+                  <VBox fx:id="enumUsbVbox" alignment="CENTER" fillWidth="false" StackPane.alignment="CENTER">
+                     <children>
+                        <ImageView fx:id="loadingImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin></ImageView>
+                        <Label text="Enumerating USB devices..." textAlignment="CENTER">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <StackPane.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </StackPane.margin>
+                  </VBox>
                </children>
-            </HBox>
-            <HBox>
-               <children>
-                  <Label minWidth="-Infinity" text="Port: " />
-                  <Label fx:id="serverPortLabel" minWidth="-Infinity" text="N/A" />
-               </children>
-            </HBox>
-            <HBox>
-               <children>
-                  <Label minWidth="-Infinity" text="Platform: " />
-                  <Label fx:id="developmentPlatform" minWidth="-Infinity" text="?" />
-               </children>
-            </HBox>
-            <ComboBox fx:id="comboBoxDevPlatform" minWidth="-Infinity" prefWidth="150.0" />
-            <ComboBox fx:id="comboBoxPlatformList" minWidth="-Infinity" prefWidth="150.0" />
+            </StackPane>
          </children>
       </VBox>
-      <Separator orientation="VERTICAL" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-      <HBox GridPane.columnIndex="5" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+      <Separator prefWidth="200.0" />
+      <VBox>
          <children>
-            <VBox fx:id="vBoxJLink" alignment="CENTER" maxWidth="-Infinity" HBox.hgrow="ALWAYS">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" text="JLink GDB Server" VBox.vgrow="ALWAYS" />
-                  <Circle fx:id="jlinkGDBServerState" fill="GREY" radius="10.0" stroke="BLACK" strokeType="INSIDE">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin></Circle>
-                  <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Button fx:id="selectjlink" contentDisplay="RIGHT" minWidth="-Infinity" mnemonicParsing="false" onAction="#selectJLink" text="Select JLink GDB Server" />
-                     </children>
-                  </HBox>
-                  <Label fx:id="jlinkpath" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" text="Unknown" textFill="RED" textOverrun="CENTER_ELLIPSIS" />
-               </children>
-               <HBox.margin>
-                  <Insets left="5.0" right="5.0" />
-               </HBox.margin>
-            </VBox>
-            <VBox fx:id="vBoxOOCD" alignment="CENTER" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" visible="false" HBox.hgrow="ALWAYS">
-               <children>
-                  <Label contentDisplay="CENTER" minWidth="-Infinity" text="OpenOCD" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin></Label>
-                  <Circle fx:id="openOCDState" fill="GREY" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
-                  <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Button fx:id="selectoocd" contentDisplay="RIGHT" minWidth="-Infinity" mnemonicParsing="false" onAction="#selectOOCD" text="Select OpenOCD" />
-                     </children>
-                  </HBox>
-                  <Label fx:id="oocdpath" contentDisplay="CENTER" maxHeight="-Infinity" text="Unknown" textFill="RED" textOverrun="CENTER_ELLIPSIS" />
-               </children>
-               <HBox.margin>
-                  <Insets left="5.0" right="5.0" />
-               </HBox.margin>
-            </VBox>
+            <Label text="Debug console: ">
+               <VBox.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </VBox.margin></Label>
+            <TextArea fx:id="debugConsole" editable="false" minHeight="200.0">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin></TextArea>
          </children>
+      </VBox>
+      <HBox alignment="CENTER_LEFT">
+         <children>
+            <Button fx:id="clearConsoleLabel" mnemonicParsing="false" onAction="#clearConsoleHistory" text="Clear console" />
+            <Button fx:id="resetConnection" mnemonicParsing="false" onAction="#resetConnection" text="Reset GDB/TCP connection">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin></Button>
+            <RadioButton fx:id="radiobtnOOCD" mnemonicParsing="false" onAction="#showOOCDOutput" text="OpenOCD" visible="false">
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+               <toggleGroup>
+                  <ToggleGroup fx:id="ocdsOutput" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="radiobtnJlink" mnemonicParsing="false" onAction="#showJlinkOutput" selected="true" text="JLink" toggleGroup="$ocdsOutput" visible="false">
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </RadioButton>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets right="5.0" top="5.0" />
+         </VBox.margin>
       </HBox>
-      <Separator orientation="VERTICAL" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-      <Accordion fx:id="accordionAdvanced" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
-        <panes>
-          <TitledPane fx:id="titledPaneAdvanced" animated="false" text="Advanced">
-               <content>
-                  <GridPane fx:id="gridPaneAdvanced">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints />
-                        <ColumnConstraints />
-                        <ColumnConstraints />
-                        <ColumnConstraints />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                    </rowConstraints>
-                     <children>
-                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" GridPane.columnSpan="5" GridPane.rowIndex="1">
-                           <children>
-                              <Button fx:id="clearConsoleLabel" mnemonicParsing="false" onAction="#clearConsoleHistory" text="Clear" />
-                              <RadioButton fx:id="radiobtnJlink" mnemonicParsing="false" onAction="#showJlinkOutput" selected="true" text="JLink">
-                                 <HBox.margin>
-                                    <Insets left="10.0" right="10.0" />
-                                 </HBox.margin>
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="ocdsOutput" />
-                                 </toggleGroup>
-                              </RadioButton>
-                              <RadioButton fx:id="radiobtnOOCD" mnemonicParsing="false" onAction="#showOOCDOutput" text="OpenOCD" toggleGroup="$ocdsOutput">
-                                 <HBox.margin>
-                                    <Insets left="10.0" right="10.0" />
-                                 </HBox.margin>
-                              </RadioButton>
-                              <Button fx:id="resetConnection" mnemonicParsing="false" onAction="#resetConnection" text="Reset Connection" />
-                           </children>
-                        </HBox>
-                        <TextArea fx:id="debugConsoleOOCD" editable="false" prefHeight="59.0" prefWidth="616.0" GridPane.columnSpan="5" />
-                        <TextArea fx:id="debugConsoleJlink" editable="false" minHeight="0.0" minWidth="0.0" GridPane.columnSpan="5" />
-                     </children>
-                  </GridPane>
-               </content>
-            </TitledPane>
-        </panes>
-      </Accordion>
    </children>
-</GridPane>
+</VBox>

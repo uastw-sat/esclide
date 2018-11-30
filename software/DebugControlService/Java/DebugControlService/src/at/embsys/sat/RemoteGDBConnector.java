@@ -85,11 +85,13 @@ public class RemoteGDBConnector implements Runnable {
         while (!end) {
             /* Create socket that is connected to server on specified port */
             InputStream in = null;
+            server = websocketServer.getIp();
+            int port = websocketServer.getDebugport();
+            logger.info("Connecting to server " + server + ":" + port + " ...");
             try {
-
                 /* Connect to server */
-                if (Main.deviceInfo.get(1).contains("universal")) server = websocketServer.getIp();
-                int port = websocketServer.getDebugport();
+                //if (Main.deviceInfo.get(0).contains("universal"))
+
                 SSLSocketFactory ssf = (SSLSocketFactory) SSLSocketFactory.getDefault();
                 socket = ssf.createSocket(server, port);
                 logger.info("Connected to server...");
@@ -98,7 +100,7 @@ public class RemoteGDBConnector implements Runnable {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        serverStateCircle.setFill(Color.GREEN);
+                        serverStateCircle.setFill(Color.LIGHTGREEN);
                     }
                 });
 

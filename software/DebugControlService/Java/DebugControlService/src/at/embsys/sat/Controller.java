@@ -18,7 +18,6 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Controller {
     public Circle browserStateCircle;
@@ -29,14 +28,13 @@ public class Controller {
     public Circle jlinkGDBServerState;
     public RadioButton radiobtnJlink;
     public RadioButton radiobtnOOCD;
-    public TextArea debugConsoleJlink;
-    public TextArea debugConsoleOOCD;
+    public TextArea debugConsole;
+    //public TextArea debugConsoleOOCD;
     public Label jlinkpath;
     public Button selectjlink;
     public Label oocdpath;
     public Button selectoocd;
-    public ComboBox comboBoxPlatformList;
-    public ComboBox comboBoxDevPlatform;
+    public ListView platFormListView;
     public TitledPane titledPaneAdvanced;
     public Accordion accordionAdvanced;
     public GridPane gridPaneAdvanced;
@@ -46,20 +44,20 @@ public class Controller {
 
     /* Clears the console history */
     public void clearConsoleHistory(ActionEvent actionEvent) {
-        debugConsoleJlink.clear();
-        debugConsoleOOCD.clear();
+        debugConsole.clear();
+       // debugConsoleOOCD.clear();
     }
 
     /* Shows the debug output of the JLink GDB server */
     public void showJlinkOutput(ActionEvent actionEvent) {
-        debugConsoleOOCD.setVisible(false);
-        debugConsoleJlink.setVisible(true);
+        debugConsole.setVisible(false);
+        //debugConsoleJlink.setVisible(true);
     }
 
     /* Shows the debug output of OpenOCD */
     public void showOOCDOutput(ActionEvent actionEvent) {
-        debugConsoleJlink.setVisible(false);
-        debugConsoleOOCD.setVisible(true);
+        debugConsole.setVisible(false);
+        //debugConsoleOOCD.setVisible(true);
     }
 
     /* Opens a dialog to choose the JLinkGDBServer executable */

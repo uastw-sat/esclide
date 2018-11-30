@@ -102,7 +102,7 @@ public class RedirectToOOCD implements Runnable {
                     @Override
                     public void run() {
 
-                        oocdStateCircle.setFill(Color.GREEN);
+                        oocdStateCircle.setFill(Color.LIGHTGREEN);
                         OpenOCDPath.setTextFill(Color.BLACK);
                     }
                 });

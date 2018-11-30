@@ -39,7 +39,7 @@ public class WebSocketServer implements Runnable {
     private static ComboBox comboboxDeviceList;
     private static Circle websocketStateCircle;
     private static String ip;
-    private static int debugport = 4445;
+    private static int debugport = 2331; //4445;
     private static Label labelIpAddr, labelServerPort;
     private static boolean listen;
     private static String debugHardware;
@@ -64,8 +64,12 @@ public class WebSocketServer implements Runnable {
         return debugHardware;
     }
 
-    /* Konstruktor to pass the text area for displaying OOCD output */
-    public WebSocketServer(Circle crc, Label ip, Stage stage, Label devPlatform, RadioButton rdbtnJlink, RadioButton rdbtnOOCD, TextArea dbgconsoleJlink, TextArea dbgconsoleOOCD, Label jlinkpth, Label port, Label oocdpth, int wsport, ComboBox comboBoxDeviceList, String keystorefilepath) {
+    public static void setIp(String ip) {
+        WebSocketServer.ip = ip;
+    }
+
+    /*Constructor to pass the text area for displaying OOCD output */
+    public WebSocketServer(Circle crc, Label ip, Stage stage, Label devPlatform, RadioButton rdbtnJlink, RadioButton rdbtnOOCD, TextArea dbgconsoleJlink, TextArea dbgconsoleOOCD, Label jlinkpth, Label port, Label oocdpth, int wsport, String keystorefilepath) {
         websocketStateCircle = crc;
         labelIpAddr = ip;
         labelServerPort = port;
@@ -76,11 +80,12 @@ public class WebSocketServer implements Runnable {
         debugConsoleJlink = dbgconsoleJlink;
         debugConsoleOOCD = dbgconsoleOOCD;
         jlinkPathLabel = jlinkpth;
+
         oocdPathLabel = oocdpth;
         if (wsport != 0) webSocketServerPort = wsport;
         if (wsport != 0) overwriteWebsocketport = true;
-        comboboxDeviceList = comboBoxDeviceList;
         keyStoreFilePath = keystorefilepath;
+        this.ip = labelIpAddr.getText();
     }
 
     /* Update IP address received from the web IDE  */
@@ -163,14 +168,13 @@ public class WebSocketServer implements Runnable {
             public void run() {
 
                 if (listen) websocketStateCircle.setFill(Color.RED);
-                else websocketStateCircle.setFill(Color.GREEN);
+                else websocketStateCircle.setFill(Color.LIGHTGREEN);
             }
         });
     }
 
     /* Set the development platform and update UI configuration*/
     public synchronized static void setDebugConfiguration(String hw) {
-
         debugHardware = hw;
         logger.debug("Set the development platform to " + debugHardware);
           /* Update UI */

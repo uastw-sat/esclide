@@ -25,7 +25,7 @@ public class OnChipDebugSystemSoftwareJLink implements Runnable {
     private final TextArea debugConsole;
     private final Circle jlinkState;
     private final Label jlinkPath;
-    private final ComboBox comboBoxHWList;
+    private final String usbSerial;
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
     private static Process procOCDSJlink = null;
     private static Thread redirectToJlinkThread;
@@ -55,15 +55,13 @@ public class OnChipDebugSystemSoftwareJLink implements Runnable {
     }
 
     /* Konstruktor to pass the text area for displaying OOCD output */
-    public OnChipDebugSystemSoftwareJLink(TextArea cmdLine, Circle jlink, Label jlkpath, ComboBox comboBoxHW, int jlinkport, List<String> deviceinfo) {
-
+    public OnChipDebugSystemSoftwareJLink(TextArea cmdLine, Circle jlink, Label jlkpath, String usbSerial, int jlinkport, List<String> deviceinfo) {
         debugConsole = cmdLine;
         jlinkState = jlink;
         jlinkPath = jlkpath;
-        comboBoxHWList = comboBoxHW;
+        this.usbSerial = usbSerial;
         if (jlinkport != 0) jLinkPort = jlinkport;
         deviceInfo = deviceinfo;
-
     }
 
     @Override
@@ -82,14 +80,14 @@ public class OnChipDebugSystemSoftwareJLink implements Runnable {
                     if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal"))
                         procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + deviceInfo.get(1) + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "/.debugcontrolservice/gdbinit");
                     else
-                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + comboBoxHWList.getSelectionModel().getSelectedItem() + " -Device XMC4500-1024 -if SWD -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "/.debugcontrolservice/gdbinit");
+                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + usbSerial + " -Device XMC4500-1024 -if SWD -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "/.debugcontrolservice/gdbinit");
                 } else if (OS.contains("windows")) {
                     //procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -Device XMC4500-1024 -if SWD");
                     //procOCDSeStick2 = Runtime.getRuntime().exec( "C:\\eStick2\\openocd\\bin\\openocd.exe -f scripts\\board\\estick2.cfg" );
                     if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal"))
-                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + deviceInfo.get(1) + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "/.debugcontrolservice/gdbinit");
+                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + deviceInfo.get(1) + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "\\.debugcontrolservice\\gdbinit");
                     else
-                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + comboBoxHWList.getSelectionModel().getSelectedItem() + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "/.debugcontrolservice/gdbinit");
+                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + usbSerial + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "\\.debugcontrolservice\\gdbinit");
                 } else {
                     logger.error("Operating system not supported for JLink GDB server");
                 }
@@ -178,7 +176,7 @@ public class OnChipDebugSystemSoftwareJLink implements Runnable {
                             @Override
                             public void run() {
                                 String tmp = debugConsole.getText() + (processInput + "\n");
-                                if (tmp.length() > 1000) tmp = tmp.substring(tmp.length() - 1000, tmp.length());
+                                if (tmp.length() > 10000) tmp = tmp.substring(tmp.length() - 10000, tmp.length());
 
                                 debugConsole.setText(tmp);
                                 debugConsole.positionCaret(tmp.length() - 1);

@@ -96,7 +96,7 @@ public class RedirectToJLink implements Runnable {
                     @Override
                     public void run() {
 
-                        xmc4500StateCircle.setFill(Color.GREEN);
+                        xmc4500StateCircle.setFill(Color.LIGHTGREEN);
                         jLinkPath.setTextFill(Color.BLACK);
                     }
                 });

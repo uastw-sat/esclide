@@ -10,7 +10,6 @@ import at.embsys.sat.Main;
 import at.embsys.sat.websocket.WebSocketConnectionHandler;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
@@ -28,7 +27,7 @@ public class OnChipDebugSystemSoftwareOpenOCD implements Runnable {
     private final TextArea debugConsole;
     private final Circle oocdState;
     private final Label oocdPath;
-    private final ComboBox comboBoxHWList;
+    private final String usbSerial;
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
     private static Thread redirectToOOCDThread;
     private static RedirectToOOCD redirecttooocd;
@@ -58,12 +57,12 @@ public class OnChipDebugSystemSoftwareOpenOCD implements Runnable {
     }
 
     /* Konstruktor to pass the text area for displaying OOCD output */
-    public OnChipDebugSystemSoftwareOpenOCD(TextArea cmdLine, Circle oocd, Label oocdpath, ComboBox comboBoxHW, int oocdport, List<String> deviceinfo, String targetPlatform) {
+    public OnChipDebugSystemSoftwareOpenOCD(TextArea cmdLine, Circle oocd, Label oocdpath, String usbSerial, int oocdport, List<String> deviceinfo, String targetPlatform) {
 
         debugConsole = cmdLine;
         oocdState = oocd;
         oocdPath = oocdpath;
-        comboBoxHWList = comboBoxHW;
+        this.usbSerial = usbSerial;
         if (oocdport != 0) oocdPort = oocdport;
         deviceInfo = deviceinfo;
         device = targetPlatform;
@@ -89,16 +88,17 @@ public class OnChipDebugSystemSoftwareOpenOCD implements Runnable {
                         procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/ek-tm4c1294xl.cfg", "-c", "hla_serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
                     else {
                         //procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(),"-f","/usr/local/share/openocd/scripts/board/xmc4500-relax.cfg","-c","jlink serial "+comboBoxHWList.getSelectionModel().getSelectedItem()});
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/ek-tm4c1294xl.cfg", "-c", "hla_serial " + comboBoxHWList.getSelectionModel().getSelectedItem()});
+                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/ek-tm4c1294xl.cfg", "-c", "hla_serial " + usbSerial});
                     }
                 } else if (OS.contains("windows")) {
+                    String tmpOocdpath = oocdPath.getText().substring(0,oocdPath.getText().length()-16) +  "\\share\\openocd\\scripts\\board";
                     if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal") && device.equals("XMC4500"))
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/xmc4500-relax.cfg", "-c", "jlink serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
+                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", tmpOocdpath + "\\xmc4500-relax.cfg", "-c", "jlink serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
                     else if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal") && device.equals("TM4C1294XL"))
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/ek-tm4c1294xl.cfg", "-c", "hla_serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
+                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", tmpOocdpath + "\\ek-tm4c1294xl.cfg", "-c", "hla_serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
                     else {
                         //procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(),"-f","/usr/local/share/openocd/scripts/board/xmc4500-relax.cfg","-c","jlink serial "+comboBoxHWList.getSelectionModel().getSelectedItem()});
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/ek-tm4c1294xl.cfg", "-c", "hla_serial " + comboBoxHWList.getSelectionModel().getSelectedItem()});
+                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", tmpOocdpath + "\\ek-tm4c1294xl.cfg", "-c", "hla_serial " + usbSerial});
                     }
                     //procOCDSeStick2 = Runtime.getRuntime().exec( "C:\\eStick2\\openocd\\bin\\openocd.exe -f scripts\\board\\estick2.cfg" );
                 } else {
@@ -201,7 +201,7 @@ public class OnChipDebugSystemSoftwareOpenOCD implements Runnable {
                 if (e.toString().contains("Cannot run program")) {
                     logger.error("The path to the OpenOCD executable is not valid");
 
-                    if (!oocdPath.getTextFill().equals(Color.RED) && NewOOCDExecSelected) {
+                    if (!oocdPath.getTextFill().equals(Color.RED)) { //&& NewOOCDExecSelected) {
 
                         Platform.runLater(new Runnable() {
                             @Override
