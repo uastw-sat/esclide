@@ -54,7 +54,7 @@ public class OnChipDebugSystemSoftwareJLink implements Runnable {
         return jLinkPort;
     }
 
-    /* Konstruktor to pass the text area for displaying OOCD output */
+    /* Construktor to pass the text area for displaying OOCD output */
     public OnChipDebugSystemSoftwareJLink(TextArea cmdLine, Circle jlink, Label jlkpath, String usbSerial, int jlinkport, List<String> deviceinfo) {
         debugConsole = cmdLine;
         jlinkState = jlink;
@@ -77,17 +77,9 @@ public class OnChipDebugSystemSoftwareJLink implements Runnable {
                 logger.debug("Start JLink GDB server");
                 /* Check OS and run JLink GDB server */
                 if ((OS.contains("linux") || OS.contains("mac"))) {
-                    if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal"))
-                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + deviceInfo.get(1) + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "/.debugcontrolservice/gdbinit");
-                    else
-                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + usbSerial + " -Device XMC4500-1024 -if SWD -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "/.debugcontrolservice/gdbinit");
+                   procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + usbSerial + " -Device XMC4500-1024 -if SWD -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "/.debugcontrolservice/gdbinit");
                 } else if (OS.contains("windows")) {
-                    //procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -Device XMC4500-1024 -if SWD");
-                    //procOCDSeStick2 = Runtime.getRuntime().exec( "C:\\eStick2\\openocd\\bin\\openocd.exe -f scripts\\board\\estick2.cfg" );
-                    if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal"))
-                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + deviceInfo.get(1) + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "\\.debugcontrolservice\\gdbinit");
-                    else
-                        procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + usbSerial + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "\\.debugcontrolservice\\gdbinit");
+                   procOCDSJlink = Runtime.getRuntime().exec(jlinkPath.getText() + " -select usb=" + usbSerial + " -Device XMC4500-1024 -if SWD" + " -port " + jLinkPort + " -xc " + System.getProperty("user.home") + "\\.debugcontrolservice\\gdbinit");
                 } else {
                     logger.error("Operating system not supported for JLink GDB server");
                 }

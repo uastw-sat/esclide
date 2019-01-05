@@ -82,24 +82,16 @@ public class OnChipDebugSystemSoftwareOpenOCD implements Runnable {
                 /* Check OS and run OpenOCD*/
                 if ((OS.contains("linux") || OS.contains("mac"))) {
                     //procOCDSJlink = Runtime.getRuntime().exec("JLinkGDBServer -Device XMC4500-1024 -if SWD");
-                    if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal") && device.equals("XMC4500"))
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/xmc4500-relax.cfg", "-c", "jlink serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
-                    else if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal") && device.equals("TM4C1294XL"))
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/ek-tm4c1294xl.cfg", "-c", "hla_serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
-                    else {
-                        //procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(),"-f","/usr/local/share/openocd/scripts/board/xmc4500-relax.cfg","-c","jlink serial "+comboBoxHWList.getSelectionModel().getSelectedItem()});
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/ek-tm4c1294xl.cfg", "-c", "hla_serial " + usbSerial});
-                    }
+                    if (device.equals("XMC4500"))
+                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/xmc4500-relax.cfg", "-c", "jlink serial " + usbSerial + ";gdb_port " + oocdPort});
+                    else if (device.equals("TM4C1294XL"))
+                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", "/usr/local/share/openocd/scripts/board/ek-tm4c1294xl.cfg", "-c", "hla_serial " + usbSerial + ";gdb_port " + oocdPort});
                 } else if (OS.contains("windows")) {
                     String tmpOocdpath = oocdPath.getText().substring(0,oocdPath.getText().length()-16) +  "\\share\\openocd\\scripts\\board";
-                    if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal") && device.equals("XMC4500"))
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", tmpOocdpath + "\\xmc4500-relax.cfg", "-c", "jlink serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
-                    else if (deviceInfo.size() > 1 && !deviceInfo.get(1).equals("universal") && device.equals("TM4C1294XL"))
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", tmpOocdpath + "\\ek-tm4c1294xl.cfg", "-c", "hla_serial " + deviceInfo.get(1) + ";gdb_port " + oocdPort});
-                    else {
-                        //procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(),"-f","/usr/local/share/openocd/scripts/board/xmc4500-relax.cfg","-c","jlink serial "+comboBoxHWList.getSelectionModel().getSelectedItem()});
-                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", tmpOocdpath + "\\ek-tm4c1294xl.cfg", "-c", "hla_serial " + usbSerial});
-                    }
+                    if (device.equals("XMC4500"))
+                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", tmpOocdpath + "\\xmc4500-relax.cfg", "-c", "jlink serial " + usbSerial + ";gdb_port " + oocdPort});
+                    else if (device.equals("TM4C1294XL"))
+                        procOCDSOOCD = Runtime.getRuntime().exec(new String[]{oocdPath.getText(), "-f", tmpOocdpath + "\\ek-tm4c1294xl.cfg", "-c", "hla_serial " + usbSerial + ";gdb_port " + oocdPort});
                     //procOCDSeStick2 = Runtime.getRuntime().exec( "C:\\eStick2\\openocd\\bin\\openocd.exe -f scripts\\board\\estick2.cfg" );
                 } else {
                     logger.error("Operating system not supported for OpenOCD");

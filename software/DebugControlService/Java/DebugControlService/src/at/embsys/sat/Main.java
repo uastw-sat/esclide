@@ -58,8 +58,8 @@ public class Main extends Application {
 	private static int wsPort;
 	private static int jlinkPort;
 	private static int oocdPort;
-	private static int startJlink = 1;
-	private static int startOOCD = 1;
+	private static int startJlink = 0;
+	private static int startOOCD = 0;
 
 	/* Required for the flash download feature of the IDE. The downloaded program is ran once a
 	 * network connection is established. Otherwise the GDB server halts the program every time
@@ -68,7 +68,7 @@ public class Main extends Application {
 
 	private static boolean jLinkInitConfigAvailable = true;
 	private static String keyStoreFilePath = "";
-	private static String targetPlatform = "universal";
+	private static String targetPlatform = "";
 	public static String target = "Infineon";
 	public static ImageView imageView;
 	public static VBox enumUsbVbox;
@@ -273,6 +273,19 @@ public class Main extends Application {
 		Thread remoteGDBConnectorThread = new Thread(remotegdbconnector);
 		remoteGDBConnectorThread.start();
 
+		//If started from commandline...
+		if (startOOCD == 1) {
+			ocdssOOCD = new OnChipDebugSystemSoftwareOpenOCD(debugConsole, debugServerState, labelOOCDPath, deviceInfo.get(0), oocdPort, deviceInfo, targetPlatform);
+			Thread ocdssOpenOCDThread = new Thread(ocdssOOCD);
+			ocdssOpenOCDThread.setDaemon(true);
+			ocdssOpenOCDThread.start();
+		}
+		if (startJlink == 1) {
+			ocdssJlink = new OnChipDebugSystemSoftwareJLink(debugConsole, debugServerState, labelJlinkPath, deviceInfo.get(0), jlinkPort, deviceInfo);
+			Thread ocdssJlinkThread = new Thread(ocdssJlink);
+			ocdssJlinkThread.start();
+		}
+
 		/* Not needed anymore since USB HotPlugListener - Michael Mazanek. partly moved to eventlistener below
         //EventListener for selecting a board manufacturer
 		comboBoxDeviceList.valueProperty().addListener(new ChangeListener<String>() {
@@ -432,6 +445,7 @@ public class Main extends Application {
 
 		/* Initialize device info */
 		deviceInfo.add(0, null);
+		deviceInfo.add(1, null);
 
 		//Add the directory of the JLink DLL to the java library path so it can be found
 		String dllPath = System.getProperty("user.dir") + "\\software\\DebugControlService\\Java\\DebugControlService";
@@ -463,13 +477,13 @@ public class Main extends Application {
 
                 /* Device info & target platform */
 				if (args[i].equals("-m") && i + 1 < args.length && !args[i + 1].startsWith("-")) {
-					deviceInfo.set(0, args[i + 1]);
+					deviceInfo.set(1, args[i + 1]);
 					targetPlatform = args[i + 1];
 				}
+
 				if (args[i].equals("-s") && i + 1 < args.length && !args[i + 1].startsWith("-"))
-					deviceInfo.set(1, args[i + 1]);
-				else
-					deviceInfo.add(1, "universal");
+					deviceInfo.set(0, args[i + 1]);
+
                 /* Websocket port */
 				if (args[i].equals("-e")) {
 					try {
